@@ -83,9 +83,9 @@ class RecordManager:
             return None
         if data['EventType'] == 'FileClosed':
             if data['EventData']['RelativePath'] not in self.pushingList:
-                self.pushRecord(data['EventData']['RelativePath'])
                 self.pushingList.append(data['EventData']['RelativePath'])
-        
+                self.pushRecord(data['EventData']['RelativePath'])
+                self.pushingList.remove(data['EventData']['RelativePath'])
         return None
 
     def pushRecord(self, recordFile, retry = 0):
@@ -96,6 +96,4 @@ class RecordManager:
             retry = retry + 1
             print("文件上传失败，正在重试重新上传，重试次数：", retry)
             self.pushRecord(recordFile, retry)
-        else:
-            self.pushingList.remove(recordFile)
         return 
